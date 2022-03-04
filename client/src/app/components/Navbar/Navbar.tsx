@@ -1,7 +1,9 @@
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Popup from "../Popup/Popup";
 import { Mode } from "../../Interfaces/IComponents/IPopup";
+import AppContext from "../../context/AppContext";
+import socket from "../../utils/Socket";
 type Props = {
   isConnected: boolean;
 };
@@ -10,6 +12,8 @@ export default function Navbar({ isConnected }: Props) {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [showJoinPopup, setShowJoinPopup] = useState(false);
 
+  const { padCode } = useContext(AppContext);
+  console.log(padCode);
   const toggleInvite = () => {
     setShowJoinPopup(false);
     setShowInvitePopup(!showInvitePopup);
@@ -18,6 +22,10 @@ export default function Navbar({ isConnected }: Props) {
   const toggleJoin = () => {
     setShowInvitePopup(false);
     setShowJoinPopup(!showJoinPopup);
+  };
+
+  const leaveRoom = () => {
+    socket.emit("leave pad", padCode);
   };
   return (
     <nav className="bg-slate-900  px-10 py-2 flex items-center justify-between ">
@@ -39,15 +47,32 @@ export default function Navbar({ isConnected }: Props) {
           <Popup
             mode={Mode.Invite}
             invitationLink="http://localhost:3000/7xfbrc"
+            setShowInvitePopup={setShowInvitePopup}
+            setShowJoinPopup={setShowJoinPopup}
           />
         )}
-        <div
-          className="relative mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
-          onClick={toggleJoin}
-        >
-          Join
-        </div>
-        {showJoinPopup && <Popup mode={Mode.Join} />}
+        {padCode ? (
+          <div
+            className="relative mr-4 px-4 py-1 text-red-700 border text-sm rounded-sm border-red-700 outline-none cursor-pointer select-none"
+            onClick={leaveRoom}
+          >
+            Leave
+          </div>
+        ) : (
+          <div
+            className="relative mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
+            onClick={toggleJoin}
+          >
+            Join
+          </div>
+        )}
+        {showJoinPopup && (
+          <Popup
+            mode={Mode.Join}
+            setShowInvitePopup={setShowInvitePopup}
+            setShowJoinPopup={setShowJoinPopup}
+          />
+        )}
         <span
           className={clsx(
             "w-5 h-5 border-white border-2  rounded-full ml-auto ",
@@ -55,6 +80,7 @@ export default function Navbar({ isConnected }: Props) {
           )}
           title={isConnected ? "Connected" : "Disconnected"}
         ></span>
+        <span className="text-white pl-4 font-mono ">{padCode}</span>
       </div>
     </nav>
   );

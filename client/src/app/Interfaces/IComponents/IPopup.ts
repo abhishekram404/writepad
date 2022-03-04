@@ -5,4 +5,7 @@ export enum Mode {
 
 export interface Props {
   mode: Mode;
+  setShowInvitePopup: Function;
+  setShowJoinPopup: Function;
+  invitationLink?: string;
 }
