@@ -40,14 +40,8 @@ io.on("connection", (socket) => {
     );
   });
 
-  socket.on("disconnecting", (s) => {
-    console.log(socket.rooms);
-    for (let room in socket.rooms) {
-      if (socket.id !== room) {
-        socket.leave(room);
-        io.to(room).emit("new user", io.sockets.adapter.rooms.get(room)?.size);
-      }
-    }
+  socket.on("disconnect", () => {
+    console.log("A user left");
   });
 });
 

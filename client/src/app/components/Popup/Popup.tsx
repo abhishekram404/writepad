@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Mode, Props } from "../../Interfaces/IComponents/IPopup";
 import socket from "../../utils/Socket";
 import clsx from "clsx";
@@ -10,7 +10,7 @@ export default function Popup({
   setShowJoinPopup,
 }: Props) {
   const [joinCode, setJoinCode] = useState("");
-
+  const [isCopied, setCopied] = useState(false);
   const joinPad = (e: React.FormEvent) => {
     e.preventDefault();
     switch (mode) {
@@ -23,19 +23,25 @@ export default function Popup({
         setShowJoinPopup(false);
         return;
       case Mode.Invite:
-        alert("Copy to clipboard");
+        copyText(invitationLink);
         return;
       default:
         return;
     }
   };
 
-  useEffect(() => {
-    return () => {
-      setShowInvitePopup(false);
-      setShowJoinPopup(false);
-    };
-  });
+  // useEffect(() => {
+  //   return () => {
+  //     setShowInvitePopup(false);
+  //     setShowJoinPopup(false);
+  //   };
+  // });
+
+  const copyText = (text: string): void => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
 
   return (
     <form
@@ -54,14 +60,18 @@ export default function Popup({
         placeholder="Paste a join code here..."
       />
       <button
-        disabled={!joinCode}
+        disabled={mode === Mode.Join && !joinCode}
         className={clsx(
           "bg-slate-900 p-2 rounded w-full text-white",
           mode === Mode.Join && !joinCode && "opacity-40 cursor-not-allowed"
         )}
         type="submit"
       >
-        {mode === Mode.Invite ? "Copy invitation link" : "Join Pad"}
+        {mode === Mode.Invite
+          ? isCopied
+            ? "Copied"
+            : "Copy invitation link"
+          : "Join Pad"}
       </button>
     </form>
   );

@@ -16,7 +16,7 @@ export default function Writepad({}: Props) {
   const { padCode: customCode } = useParams<{ padCode: string }>();
   // console.log(params);
 
-  const { padCode, isConnected, setConnected } = useContext(AppContext);
+  const { setConnected } = useContext(AppContext);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -25,7 +25,6 @@ export default function Writepad({}: Props) {
     });
 
     socket.on("new user", (count) => {
-      console.log(count);
       setActiveUserCount(count);
     });
   }, []);
