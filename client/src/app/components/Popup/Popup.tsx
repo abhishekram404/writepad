@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Mode, Props } from "../../Interfaces/IComponents/IPopup";
 import socket from "../../utils/Socket";
 import clsx from "clsx";
@@ -29,6 +29,13 @@ export default function Popup({
         return;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      setShowInvitePopup(false);
+      setShowJoinPopup(false);
+    };
+  });
 
   return (
     <form

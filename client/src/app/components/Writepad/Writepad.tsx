@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
+import AppContext from "../../context/AppContext";
+import JoinPad from "../JoinPad/JoinPad";
 type Props = {};
 
 export default function Writepad({}: Props) {
@@ -7,7 +9,7 @@ export default function Writepad({}: Props) {
     setText(e.target.value);
     autoScroll(e);
   };
-
+  const { padCode } = useContext(AppContext);
   const textarea = useRef<any>();
 
   function autoScroll(e: any) {

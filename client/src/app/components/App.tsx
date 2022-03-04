@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Writepad from "./Writepad";
-
+import Writepad from "./Writepad/Writepad";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import socket from "../utils/Socket";
 import Navbar from "./Navbar/Navbar";
 import AppContext from "../context/AppContext";
+import JoinPad from "./JoinPad/JoinPad";
 function App() {
   const [isConnected, setConnected] = useState(false);
   const [padCode, setPadCode] = useState("");
@@ -21,27 +22,18 @@ function App() {
     });
   });
 
-  useEffect(() => {
-    socket.on("pad joined", (joinCode) => {
-      console.log("Joined in room", joinCode);
-      setPadCode(joinCode);
-    });
-  }, []);
-
-  useEffect(() => {
-    socket.on("pad left", (padCode) => {
-      console.log("Leaving pad ", padCode);
-      setPadCode("");
-    });
-  }, []);
-
   return (
     <AppContext.Provider
       value={{ padCode, setPadCode, isConnected, setConnected }}
     >
       <div className="App min-h-screen">
-        <Navbar isConnected={isConnected} />
-        <Writepad />
+        <Router>
+          <Navbar isConnected={isConnected} />
+          <Routes>
+            <Route path="/" element={<JoinPad />} />
+            <Route path="/:padCode" element={<Writepad />} />
+          </Routes>
+        </Router>
       </div>
     </AppContext.Provider>
   );

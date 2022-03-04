@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { customAlphabet } from "nanoid";
+const generatePadCode = customAlphabet("abcdefghijklmnopqrstuvwxyz", 6);
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -10,7 +11,6 @@ const io = new Server(httpServer, {
   },
 });
 
-const generatePadCode = customAlphabet("abcdefghijklmnopqrstuvwxyz", 6);
 io.on("connection", (socket) => {
   console.log("A new client connected");
 
@@ -21,6 +21,7 @@ io.on("connection", (socket) => {
   socket.emit("message", "welcome client");
 
   socket.on("join pad", (joinCode) => {
+    console.log(joinCode);
     for (let room in socket.rooms) {
       if (socket.id !== room) {
         socket.leave(room);

@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Popup from "../Popup/Popup";
 import { Mode } from "../../Interfaces/IComponents/IPopup";
 import AppContext from "../../context/AppContext";
 import socket from "../../utils/Socket";
+import { useNavigate } from "react-router-dom";
 type Props = {
   isConnected: boolean;
 };
@@ -11,8 +12,8 @@ type Props = {
 export default function Navbar({ isConnected }: Props) {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [showJoinPopup, setShowJoinPopup] = useState(false);
-
-  const { padCode } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { padCode, setPadCode } = useContext(AppContext);
   console.log(padCode);
   const toggleInvite = () => {
     setShowJoinPopup(false);
@@ -27,6 +28,23 @@ export default function Navbar({ isConnected }: Props) {
   const leaveRoom = () => {
     socket.emit("leave pad", padCode);
   };
+
+  useEffect(() => {
+    socket.on("pad left", (padCode) => {
+      console.log("Leaving pad ", padCode);
+      setPadCode("");
+      navigate("/");
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on("pad joined", (joinCode) => {
+      console.log("Joined in room", joinCode);
+      setPadCode(joinCode);
+      navigate(`/${joinCode}`);
+    });
+  }, []);
+
   return (
     <nav className="bg-slate-900  px-10 py-2 flex items-center justify-between ">
       <div className="flex items-center">
