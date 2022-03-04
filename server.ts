@@ -40,6 +40,11 @@ io.on("connection", (socket) => {
     );
   });
 
+  socket.on("send text update", ({ padCode, text }) => {
+    console.log(text);
+    socket.to(padCode).emit("receive text update", text);
+  });
+
   socket.on("disconnect", () => {
     console.log("A user left");
   });

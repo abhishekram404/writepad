@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import AppContext from "./context/AppContext";
+import AppContext from "../../context/AppContext";
 import socket from "../../utils/Socket";
 
 type Props = {};
@@ -8,15 +8,21 @@ type Props = {};
 export default function Writepad({}: Props) {
   const [text, setText] = useState("");
   const [activeUsersCount, setActiveUserCount] = useState(0);
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-    autoScroll(e);
-  };
-
+  const { setConnected, padCode } = useContext(AppContext);
   const { padCode: customCode } = useParams<{ padCode: string }>();
-  // console.log(params);
 
-  const { setConnected } = useContext(AppContext);
+  const events = {
+    handleTextChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setText(e.target.value);
+      socket.emit("send text update", { padCode, text: e.target.value });
+      events.autoScroll(e);
+    },
+    autoScroll: (e: any) => {
+      e.target.style.height = "inherit";
+      e.target.style.height = `${e.target.scrollHeight}px`;
+      textarea.current.scrollTop = textarea.current.scrollHeight;
+    },
+  };
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -31,11 +37,14 @@ export default function Writepad({}: Props) {
 
   const textarea = useRef<any>();
 
-  function autoScroll(e: any) {
-    e.target.style.height = "inherit";
-    e.target.style.height = `${e.target.scrollHeight}px`;
-    textarea.current.scrollTop = textarea.current.scrollHeight;
-  }
+  useEffect(() => {
+    socket.on("receive text update", (newText) => {
+      if (newText !== text) {
+        setText(newText);
+      }
+    });
+  }, []);
+
   return (
     <div className="flex justify-center flex-col w-[80%] mx-auto py-10">
       <div className="flex items-center justify-between">
@@ -51,7 +60,7 @@ export default function Writepad({}: Props) {
         name="writepad"
         id="writepad"
         className="border border-slate-400 outline-none transition-all leading-7 border-1 w-full p-4"
-        onChange={handleTextChange}
+        onChange={events.handleTextChange}
         value={text}
         ref={textarea}
       ></textarea>
