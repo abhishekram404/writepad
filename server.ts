@@ -14,12 +14,6 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log("A new client connected");
 
-  let code = generatePadCode();
-  socket.join(code);
-  socket.emit("pad joined", code);
-
-  socket.emit("message", "welcome client");
-
   socket.on("join pad", (joinCode) => {
     console.log(joinCode);
     for (let room in socket.rooms) {
@@ -28,9 +22,10 @@ io.on("connection", (socket) => {
       }
     }
 
-    socket.join(joinCode);
+    let code = joinCode || generatePadCode();
+    socket.join(code);
     console.log(socket.rooms);
-    socket.emit("pad joined", joinCode);
+    socket.emit("pad joined", code);
   });
 
   socket.on("leave pad", (padCode) => {

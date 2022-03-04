@@ -1,6 +1,8 @@
-import React, { useContext, useRef, useState } from "react";
-import AppContext from "../../context/AppContext";
-import JoinPad from "../JoinPad/JoinPad";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import AppContext from "./context/AppContext";
+import socket from "../../utils/Socket";
+
 type Props = {};
 
 export default function Writepad({}: Props) {
@@ -9,7 +11,19 @@ export default function Writepad({}: Props) {
     setText(e.target.value);
     autoScroll(e);
   };
-  const { padCode } = useContext(AppContext);
+
+  const { padCode: customCode } = useParams<{ padCode: string }>();
+  // console.log(params);
+
+  const { padCode, isConnected, setConnected } = useContext(AppContext);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      setConnected(true);
+      socket.emit("join pad", customCode);
+    });
+  }, []);
+
   const textarea = useRef<any>();
 
   function autoScroll(e: any) {

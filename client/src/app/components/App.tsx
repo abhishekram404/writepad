@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Writepad from "./Writepad/Writepad";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
 import socket from "../utils/Socket";
 import Navbar from "./Navbar/Navbar";
-import AppContext from "../context/AppContext";
+import AppContext from "./Writepad/context/AppContext";
 import JoinPad from "./JoinPad/JoinPad";
 function App() {
   const [isConnected, setConnected] = useState(false);
   const [padCode, setPadCode] = useState("");
+  const params = useParams();
   useEffect(() => {
     socket.connect();
   }, []);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      setConnected(true);
-    });
-
     socket.on("disconnect", () => {
       setConnected(false);
     });

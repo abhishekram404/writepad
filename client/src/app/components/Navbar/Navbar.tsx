@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React, { useContext, useEffect, useState } from "react";
 import Popup from "../Popup/Popup";
 import { Mode } from "../../Interfaces/IComponents/IPopup";
-import AppContext from "../../context/AppContext";
+import AppContext from "../Writepad/context/AppContext";
 import socket from "../../utils/Socket";
 import { useNavigate } from "react-router-dom";
 type Props = {
