@@ -15,7 +15,6 @@ io.on("connection", (socket) => {
   console.log("A new client connected");
 
   socket.on("join pad", (joinCode) => {
-    console.log(joinCode);
     for (let room in socket.rooms) {
       if (socket.id !== room) {
         socket.leave(room);
@@ -24,14 +23,31 @@ io.on("connection", (socket) => {
 
     let code = joinCode || generatePadCode();
     socket.join(code);
-    console.log(socket.rooms);
     socket.emit("pad joined", code);
+    io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
+
+    setInterval(() => {
+      io.to(code).emit("new user", io.sockets.adapter.rooms.get(code)?.size);
+    }, 5000);
   });
 
   socket.on("leave pad", (padCode) => {
     socket.leave(padCode);
-    console.log(socket.rooms);
     socket.emit("pad left", padCode);
+    io.to(padCode).emit(
+      "new user",
+      io.sockets.adapter.rooms.get(padCode)?.size
+    );
+  });
+
+  socket.on("disconnecting", (s) => {
+    console.log(socket.rooms);
+    for (let room in socket.rooms) {
+      if (socket.id !== room) {
+        socket.leave(room);
+        io.to(room).emit("new user", io.sockets.adapter.rooms.get(room)?.size);
+      }
+    }
   });
 });
 

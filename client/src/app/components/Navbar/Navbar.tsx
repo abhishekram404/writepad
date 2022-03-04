@@ -14,7 +14,6 @@ export default function Navbar({ isConnected }: Props) {
   const [showJoinPopup, setShowJoinPopup] = useState(false);
   const navigate = useNavigate();
   const { padCode, setPadCode } = useContext(AppContext);
-  console.log(padCode);
   const toggleInvite = () => {
     setShowJoinPopup(false);
     setShowInvitePopup(!showInvitePopup);
@@ -55,19 +54,23 @@ export default function Navbar({ isConnected }: Props) {
       </div>
 
       <div className="relative flex items-center ">
-        <div
-          className=" mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
-          onClick={toggleInvite}
-        >
-          Invite
-        </div>
-        {showInvitePopup && (
-          <Popup
-            mode={Mode.Invite}
-            invitationLink="http://localhost:3000/7xfbrc"
-            setShowInvitePopup={setShowInvitePopup}
-            setShowJoinPopup={setShowJoinPopup}
-          />
+        {padCode && (
+          <>
+            <div
+              className=" mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
+              onClick={toggleInvite}
+            >
+              Invite
+            </div>
+            {showInvitePopup && (
+              <Popup
+                mode={Mode.Invite}
+                invitationLink="http://localhost:3000/7xfbrc"
+                setShowInvitePopup={setShowInvitePopup}
+                setShowJoinPopup={setShowJoinPopup}
+              />
+            )}
+          </>
         )}
         {padCode ? (
           <div
@@ -77,19 +80,21 @@ export default function Navbar({ isConnected }: Props) {
             Leave
           </div>
         ) : (
-          <div
-            className="relative mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
-            onClick={toggleJoin}
-          >
-            Join
-          </div>
-        )}
-        {showJoinPopup && (
-          <Popup
-            mode={Mode.Join}
-            setShowInvitePopup={setShowInvitePopup}
-            setShowJoinPopup={setShowJoinPopup}
-          />
+          <>
+            <div
+              className="relative mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
+              onClick={toggleJoin}
+            >
+              Join
+            </div>
+            {showJoinPopup && (
+              <Popup
+                mode={Mode.Join}
+                setShowInvitePopup={setShowInvitePopup}
+                setShowJoinPopup={setShowJoinPopup}
+              />
+            )}
+          </>
         )}
         <span
           className={clsx(

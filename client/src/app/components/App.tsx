@@ -13,12 +13,16 @@ import JoinPad from "./JoinPad/JoinPad";
 function App() {
   const [isConnected, setConnected] = useState(false);
   const [padCode, setPadCode] = useState("");
-  const params = useParams();
+
   useEffect(() => {
     socket.connect();
   }, []);
 
   useEffect(() => {
+    socket.on("connect", () => {
+      setConnected(true);
+    });
+
     socket.on("disconnect", () => {
       setConnected(false);
     });
