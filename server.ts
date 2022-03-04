@@ -5,9 +5,24 @@ import { customAlphabet } from "nanoid";
 const generatePadCode = customAlphabet("abcdefghijklmnopqrstuvwxyz", 6);
 const app = express();
 const httpServer = createServer(app);
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config();
+
+const isProduction = process.env.NODE_ENV === "production";
+cors({
+  origin: isProduction
+    ? "https://abhishekram404-writepad.herokuapp.com"
+    : "http://localhost:3000",
+});
+
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: isProduction
+      ? "https://abhishekram404-writepad.herokuapp.com"
+      : "http://localhost:3000",
   },
 });
 
@@ -40,9 +55,21 @@ io.on("connection", (socket) => {
     );
   });
 
+  socket.on("send text update", ({ padCode, text }) => {
+    console.log(text);
+    socket.to(padCode).emit("receive text update", text);
+  });
+
   socket.on("disconnect", () => {
     console.log("A user left");
   });
 });
+
+if (isProduction) {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 httpServer.listen(4000);
