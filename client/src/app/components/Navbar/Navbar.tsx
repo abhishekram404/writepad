@@ -65,7 +65,7 @@ export default function Navbar({ isConnected }: Props) {
             {showInvitePopup && (
               <Popup
                 mode={Mode.Invite}
-                invitationLink="http://localhost:3000/7xfbrc"
+                invitationLink={window.location.href}
                 setShowInvitePopup={setShowInvitePopup}
                 setShowJoinPopup={setShowJoinPopup}
               />
