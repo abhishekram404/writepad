@@ -1,18 +1,22 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
+import { customAlphabet } from "nanoid";
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  /* options */
   cors: {
     origin: "http://localhost:3000",
   },
 });
 
+const generatePadCode = customAlphabet("abcdefghijklmnopqrstuvwxyz", 6);
 io.on("connection", (socket) => {
   console.log("A new client connected");
+
+  let code = generatePadCode();
+  socket.join(code);
+  socket.emit("pad joined", code);
 
   socket.emit("message", "welcome client");
 
@@ -33,8 +37,6 @@ io.on("connection", (socket) => {
     console.log(socket.rooms);
     socket.emit("pad left", padCode);
   });
-
-  // ...
 });
 
 httpServer.listen(4000);
