@@ -19,36 +19,35 @@ export default function JoinPad({}: Props) {
 
   useEffect(() => {
     socket.on("pad joined", (joinCode) => {
-      console.log("Joined in room", joinCode);
       setPadCode(joinCode);
       navigate(`/${joinCode}`);
     });
   }, []);
 
   return (
-    <div className="bg-slate-100 px-3 py-6 rounded w-[80%]  mx-auto">
-      <h5 className="text-3xl text-slate-800 font-mono font-bold mb-1 ">
+    <div className="bg-slate-100 px-4 sm:px-8 py-6 rounded w-full sm:w-[80%] h-screen  mx-auto">
+      <h5 className="text-2xl sm:text-3xl text-slate-800 font-mono font-bold mb-1 ">
         Writepad
       </h5>
-      <p className="text-xl text-slate-700 mb-4 font-mono">
+      <p className="text-base sm:text-xl text-slate-700 mb-4 font-mono">
         Realtime text based collaboration environment
       </p>
-      <h4 className="text-xl mb-3 text-slate-600 font-mono">
+      <h4 className="text-base sm:text-xl mb-3 text-slate-600 font-mono">
         Join a pad and start collaborating now{" "}
       </h4>
       <form
-        className="bg-white w-1/3 flex flex-col shadow-lg justify-start p-3 rounded"
+        className="bg-white w-full  sm:w-[60%] md:w-[40%] flex flex-col shadow-lg justify-start p-2 sm:p-3 rounded"
         onSubmit={events.onSubmit}
       >
         <input
           type="text"
           placeholder="Enter Pad code here..."
-          className="border mb-2 border-slate-400 rounded text-xl p-2 outline-none "
+          className="border mb-2 border-slate-400 rounded text-sm sm:text-lg p-2 outline-none "
           value={padCode}
           onChange={events.onChange}
         />
         <button
-          className="w-max px-3 py-2 rounded-md bg-slate-800 text-white"
+          className="w-max px-2 py-2 text-sm sm:text-base rounded-md bg-slate-800 text-white"
           type="submit"
         >
           Join Pad

@@ -30,7 +30,6 @@ export default function Navbar({ isConnected }: Props) {
 
   useEffect(() => {
     socket.on("pad left", (padCode) => {
-      console.log("Leaving pad ", padCode);
       setPadCode("");
       navigate("/");
     });
@@ -38,26 +37,25 @@ export default function Navbar({ isConnected }: Props) {
 
   useEffect(() => {
     socket.on("pad joined", (joinCode) => {
-      console.log("Joined in room", joinCode);
       setPadCode(joinCode);
       navigate(`/${joinCode}`);
     });
   }, []);
 
   return (
-    <nav className="bg-slate-900  px-10 py-2 flex items-center justify-between ">
-      <div className="flex items-center">
+    <nav className="bg-slate-900  px-4 sm:px-10 py-2 flex items-center justify-between ">
+      <div className="flex flex-col justify-start items-start">
         <h1 className="text-white font-bold font-mono">Writepad&nbsp;</h1>
-        <p className="text-slate-300 font-light font-mono text-sm">
-          - A realtime text based collaboration environment
+        <p className="text-slate-300 font-light font-mono text-xs hidden sm:inline-flex sm:text-sm">
+          A realtime text based collaboration environment
         </p>
       </div>
 
-      <div className="relative flex items-center ">
+      <div className="relative flex   sm:flex-row gap-1 justify-center items-center">
         {padCode && (
           <>
             <div
-              className=" mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
+              className="px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
               onClick={toggleInvite}
             >
               Invite
@@ -74,7 +72,7 @@ export default function Navbar({ isConnected }: Props) {
         )}
         {padCode ? (
           <div
-            className="relative mr-4 px-4 py-1 text-red-700 border text-sm rounded-sm border-red-700 outline-none cursor-pointer select-none"
+            className="relative px-4 py-1 text-red-700 border text-sm rounded-sm border-red-700 outline-none cursor-pointer select-none"
             onClick={leaveRoom}
           >
             Leave
@@ -82,7 +80,7 @@ export default function Navbar({ isConnected }: Props) {
         ) : (
           <>
             <div
-              className="relative mr-4 px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
+              className="relative px-4 py-1 text-slate-300 border text-sm rounded-sm border-slate-300 outline-none cursor-pointer select-none"
               onClick={toggleJoin}
             >
               Join
@@ -98,12 +96,12 @@ export default function Navbar({ isConnected }: Props) {
         )}
         <span
           className={clsx(
-            "w-5 h-5 border-white border-2  rounded-full ml-auto ",
+            "w-5 h-5 border-white border-2  rounded-full mx-2 ",
             isConnected ? "bg-green-600" : "bg-red-600"
           )}
           title={isConnected ? "Connected" : "Disconnected"}
         ></span>
-        <span className="text-white pl-4 font-mono ">{padCode}</span>
+        <span className="text-white px-2 font-mono ">{padCode}</span>
       </div>
     </nav>
   );

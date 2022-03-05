@@ -43,19 +43,18 @@ export default function Writepad({}: Props) {
       if (newText !== text) {
         setText(newText);
       }
-      console.log(newText);
     });
   }, []);
 
   return (
-    <div className="flex justify-center flex-col w-[80%] mx-auto py-10">
+    <div className="flex justify-center flex-col w-full md:w-[80%]  mx-auto px-4 py-5">
       <div className="flex items-center justify-between">
-        <h5 className="text-3xl text-slate-800 font-mono font-bold mb-1 ">
+        <h5 className="text-2xl md:text-3xl text-slate-800 font-mono font-bold mb-1 ">
           Writepad
         </h5>
         <p>Active users: {activeUsersCount}</p>
       </div>
-      <p className="text-xl text-slate-700 mb-4 font-mono">
+      <p className="text-sm md:text-xl text-slate-700 mb-4 font-mono">
         Realtime text based collaboration environment
       </p>
       <textarea
