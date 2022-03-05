@@ -1,0 +1,23 @@
+.ck.ck-content ul,
+.ck.ck-content ul li,
+.ck.ck-content ol,
+.ck.ck-content ul ol {
+  list-style-type: inherit;
+}
+
+.ck.ck-content ul,
+.ck.ck.ck-content ol {
+  padding-left: 40px;
+}
+
+.ck.ck-content h2 {
+  font-size: 26pt;
+}
+
+.ck.ck-content h3 {
+  font-size: 22pt;
+}
+
+.ck.ck-content h4 {
+  font-size: 18pt;
+}

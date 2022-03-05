@@ -11,10 +11,10 @@ export default function Writepad() {
   const { padCode: customCode } = useParams<{ padCode: string }>();
 
   const events = {
-    handleTextChange: (
-      e: React.ChangeEvent<HTMLTextAreaElement>,
-      editor: any
-    ) => {
+    handleTextChange: function (
+      event: React.ChangeEvent<HTMLTextAreaElement>,
+      editor: { getData: () => string }
+    ) {
       const data = editor.getData();
       setText(data);
       socket.emit("send text update", { padCode, text: data });
