@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import socket from "../../utils/Socket";
 import InlineEditor from "../InlineEditor/InlineEditor";
 
-type Props = {};
-
-export default function Writepad({}: Props) {
+export default function Writepad() {
   const [text, setText] = useState("");
   const [activeUsersCount, setActiveUserCount] = useState(0);
   const { setConnected, padCode } = useContext(AppContext);
