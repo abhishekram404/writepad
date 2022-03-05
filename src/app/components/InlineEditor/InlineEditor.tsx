@@ -1,10 +1,7 @@
 import React from "react";
+import { Props } from "../../Interfaces/IComponents/IInlineEditor";
 const { CKEditor } = require("@ckeditor/ckeditor5-react");
 const Editor = require("@ckeditor/ckeditor5-build-inline");
-type Props = {
-  text: string;
-  onChange: Function;
-};
 
 export default function InlineEditor({ text, onChange }: Props) {
   return (
