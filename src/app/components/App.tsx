@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Writepad from "./Writepad/Writepad";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Navigate,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import socket from "../utils/Socket";
 import Navbar from "./Navbar/Navbar";
 import AppContext from "../context/AppContext";
@@ -37,12 +32,7 @@ function App() {
           <Navbar isConnected={isConnected} />
           <Routes>
             <Route path="/" element={<JoinPad />} />
-            <Route
-              path="/:padCode"
-              element={
-                !padCode || !isConnected ? <Navigate to="/" /> : <Writepad />
-              }
-            />
+            <Route path="/:padCode" element={<Writepad />} />
           </Routes>
         </Router>
       </div>
