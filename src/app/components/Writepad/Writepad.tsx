@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import socket from "../../utils/Socket";
 
@@ -8,9 +8,8 @@ type Props = {};
 export default function Writepad({}: Props) {
   const [text, setText] = useState("");
   const [activeUsersCount, setActiveUserCount] = useState(0);
-  const { setConnected, padCode, isConnected } = useContext(AppContext);
+  const { setConnected, padCode } = useContext(AppContext);
   const { padCode: customCode } = useParams<{ padCode: string }>();
-  const navigate = useNavigate();
 
   const events = {
     handleTextChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,7 +39,7 @@ export default function Writepad({}: Props) {
 
   useEffect(() => {
     socket.on("receive text update", (newText) => {
-      if (newText !== text) {
+      if (newText && newText !== text) {
         setText(newText);
       }
     });
