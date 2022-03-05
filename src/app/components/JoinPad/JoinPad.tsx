@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import socket from "../../utils/Socket";
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
-
-export default function JoinPad({}: Props) {
+export default function JoinPad() {
   const [padCode, setPadCode] = useState("");
   const navigate = useNavigate();
   const events = {
