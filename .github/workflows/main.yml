@@ -1,0 +1,40 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: "16.x"
+        cache: 'npm'
+    
+    - name: Install Dependencies
+      run : npm install
+      
+    - name: Build code
+      env:
+        REACT_APP_SOCKET_URI : ${{ secrets.REACT_APP_SOCKET_URI }}
+        NODE_ENV: production
+        CI: ""
+      run:  npm run build --if-present
+      
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env: 
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          TARGET: "/home/abhishekram/writepad/build"
+          SOURCE: "build/"
+          ARGS: "--delete"
+          REMOTE_HOST: ${{ secrets.SSH_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
