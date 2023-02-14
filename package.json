@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "https://writepad-api.herokuapp.com",
   "dependencies": {
-    "@ckeditor/ckeditor5-build-inline": "^32.0.0",
+    "@ckeditor/ckeditor5-build-inline": "^36.0.1",
     "@ckeditor/ckeditor5-react": "^4.0.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
